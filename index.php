@@ -30,10 +30,7 @@ $user_in = user_logged_in($conn);
 
 </head>
 <body>
-    <!-- <div class="container">
-        <img src="img/logo.webp" alt="Moving Image" id="movable-image">
-    </div> -->
-
+ 
     <?php if ($user_in) {?>
         <button onclick="logout ()">logout</button>
         <?php }else { ?>

@@ -1,6 +1,6 @@
 <script src="script.js"></script>
 <?php
-// Start session to store user data
+
 include ('querys.php');
 include ("conn.php");
 session_start();

@@ -1,23 +1,4 @@
 
-<!-- 
-include 'conn.php';
-
-function create_databases($conn) {
-    $database_name = "pizza";
-    $sql = "SHOW DATABASES LIKE '$database_name';";
-    $result = $conn->query($sql);
-    
-    if ($result && $result->num_rows == 0) {
-        $conn->query("CREATE DATABASE `$database_name`;"); 
-        echo "Database created";
-    } else if ($result && $result->num_rows > 0) {
-        echo "Database already exists";
-    } else {
-        echo "Error checking database: " . $conn->error;
-    }
-} -->
-
-
 <?php
 
 function create_databases ($conn, $database_name) {
