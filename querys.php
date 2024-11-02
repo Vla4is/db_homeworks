@@ -77,7 +77,8 @@ function new_order ($conn, $item_id) {
 function get_all_orders($conn) {
     $sql = "SELECT o.order_id, i.item_name 
             FROM orders o
-            JOIN items i ON o.item_id = i.item_id"; 
+            JOIN items i ON o.item_id = i.item_id 
+            ORDER BY o.order_id";
 
     $stmt = $conn->prepare($sql);
     if ($stmt->execute()) {
