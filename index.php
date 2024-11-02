@@ -1,9 +1,8 @@
 <?php
-include 'conn.php'; // Replace 'filename.php' with the path to your file
+include 'conn.php';
 include 'querys.php';
 include 'support_functions.php';
 session_start();
-// $session ["username"] = 'Vlad';
 $errors = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["username"])) {
@@ -18,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $user_in = user_logged_in($conn);
 
-
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +30,10 @@ $user_in = user_logged_in($conn);
 
 </head>
 <body>
+    <!-- <div class="container">
+        <img src="img/logo.webp" alt="Moving Image" id="movable-image">
+    </div> -->
+
     <?php if ($user_in) {?>
         <button onclick="logout ()">logout</button>
         <?php }else { ?>
@@ -45,10 +47,12 @@ $user_in = user_logged_in($conn);
     </ul>
 <?php endif; ?>
     <div class="main">
+    <img src="img/logo.webp" alt="Moving Image" id="movable-image">
     <?php if ($user_in) {?>
-        <button>New order</button>
-        <button>Find order</button>
-        <button>Recent orders</button>
+        <button onclick="showthebeer_waitasec_andgo ('new_order.php')">New order</button>
+        <button onclick="showthebeer_waitasec_andgo ('orders.php')">Previous orders</button>
+        <button onclick="showthebeer_waitasec_andgo ('edit_items.php')">Edit items</button>
+        <img src="img/loading.gif" alt="" style="width: 50px; height:auto; margin-top: 10px; display: none;" id="beer">
     <?php } else {?>
 
 
@@ -61,7 +65,8 @@ $user_in = user_logged_in($conn);
     </form>
     <?php }?>
     </div>
-    <span id = "for_php"></span>
+
+    <script src="script.js"></script>
 </body>
 
 

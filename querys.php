@@ -36,5 +36,66 @@ function login_user ($conn, $username, $password) {
     // }
 }
 
+function add_item ($conn, $item_name) {
+    $sql = "INSERT INTO items (item_name) VALUES ('$item_name');";
+    $conn->query ($sql);
+    return true;
+}
+
+function get_all_items($conn) {
+    $sql = "SELECT item_name, item_id FROM items";
+    $stmt = $conn->prepare($sql);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $items = [];
+        while ($row = $result->fetch_assoc()) {
+            $items[] = [
+                'item_name' => $row['item_name'],
+                'item_id' => $row['item_id']
+            ];
+        }
+
+        return $items;
+    } else {
+        return [];
+    }
+}
+
+function delete_item ( $conn, $item_id ) {
+    $sql = "DELETE FROM items WHERE item_id = '$item_id';";
+    $conn->query ($sql);
+}
+
+function new_order ($conn, $item_id) {
+    $sql = "INSERT INTO orders (item_id) VALUES (?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $item_id);
+    $stmt->execute();
+    return $conn->insert_id;
+}
+
+function get_all_orders($conn) {
+    $sql = "SELECT o.order_id, i.item_name 
+            FROM orders o
+            JOIN items i ON o.item_id = i.item_id"; 
+
+    $stmt = $conn->prepare($sql);
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $orders = [];
+        while ($row = $result->fetch_assoc()) {
+            $orders[] = [
+                'order_id' => $row['order_id'],
+                'item_name' => $row['item_name']
+            ];
+        }
+
+        return $orders;
+    } else {
+        return [];
+    }
+}
+
+
 
 ?>

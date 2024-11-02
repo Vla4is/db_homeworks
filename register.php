@@ -1,3 +1,4 @@
+<script src="script.js"></script>
 <?php
 // Start session to store user data
 include ('querys.php');
@@ -37,9 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     elseif (empty($errors)) {
-        $_SESSION['username'] = $username;
+        
         if (register_user ($conn, $username, $password)){
-            echo "<p>Registration successful! Welcome, $username.</p>";
+            echo "<p>Registration successful! Please log in</p>";
+            echo "<script>redirect_after_one_sec()</script>";     
         }
     }
 }
@@ -51,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Register</title>
     <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
 
