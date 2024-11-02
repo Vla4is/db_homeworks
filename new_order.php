@@ -1,7 +1,7 @@
 <?php
 include ("conn.php");
 include ("support_functions.php");
-include ("querys.php");
+
 session_start();
 $user_in = user_logged_in($conn);
 

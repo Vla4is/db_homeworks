@@ -1,7 +1,6 @@
 <script src="script.js"></script>
 <?php
 
-include ('querys.php');
 include ("conn.php");
 session_start();
 

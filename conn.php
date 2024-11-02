@@ -1,5 +1,6 @@
 <?php
 include("create_databases.php");
+include ("querys.php");
 $servername = "localhost";
 $username = "root";
 $password = ""; 
@@ -12,6 +13,9 @@ if ($conn) {
     if ($result && $result->num_rows == 0) {
         create_databases ($conn, $database_name);
         $conn = new mysqli($servername, $username, $password, $database_name);
+        register_user ($conn, "admin", "admin");
+        set_admin($conn, 1);
+        
 
     }
     else {

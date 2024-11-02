@@ -2,11 +2,12 @@
 <?php
 include ("conn.php");
 include ("support_functions.php");
-include ("querys.php");
+
 
 session_start ();
 $user_in = user_logged_in($conn);
 $errors = [];
+$action_result = "";
 if (!$user_in) {
 
     header("Location: index.php");
@@ -19,9 +20,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[''] = 'The item has to be at least 1 char long';
         }else {
             add_item($conn, $_POST['new_item']);
+            $new_item = $_POST['new_item'];
+            $action_result = "<b>$new_item</b> added succesfully";
+
         }
     }elseif (isset ($_POST['delete']) and isset ($_POST['item_id'])) {
         delete_item($conn, $_POST['item_id']);
+        $action_result = "Deleted succesfully";
+
+    }
+    elseif (isset ($_POST['edit']) and isset ($_POST['item_id'])) {
+        
+
+        if (strlen ($_POST['item_name']) == 0) {
+            $errors[''] = 'The item has to be at least 1 char long';
+        }else {
+            update_item ($conn, $_POST['item_name'], $_POST['item_id']);
+            $item_name = $_POST['item_name'];
+            $action_result = "Item <b>$item_name</b> updated succesfully";
+        }
+
+
     }
 
 }
@@ -52,8 +71,10 @@ $items = get_all_items($conn);
     <div class="main">
         <?php foreach ($items as $item): ?>
             <form action="" method="POST">
-                <span><?php echo $item ["item_name"]; ?></span>
+                
                 <input type="hidden" value="<?php echo $item ['item_id']; ?>" name="item_id">
+                <input type="text" name="item_name" value = "<?php echo $item ["item_name"]; ?>">
+                <button name="edit" type="submit">edit</button>
                 <button type="submit" name="delete">delete</button>
             </form>
         <?php endforeach; ?>
@@ -64,7 +85,7 @@ $items = get_all_items($conn);
             <input type="text" name="new_item" >
             <button type="submit" name="new_submit">add</button>
         </form>
-            
+        <div><?php echo $action_result ?></div>
         
     
         

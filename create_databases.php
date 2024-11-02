@@ -8,11 +8,10 @@ function create_databases ($conn, $database_name) {
     create_users_table($conn);
     create_items_table ($conn);
     create_orders_table ($conn);
-    
 }
 
 function create_users_table ($conn) {
-    $sql = "CREATE TABLE users (user_id INT AUTO_INCREMENT PRIMARY KEY,  username VARCHAR (100) UNIQUE NOT NULL ,  password VARCHAR (255), token VARCHAR (255));";
+    $sql = "CREATE TABLE users (user_id INT AUTO_INCREMENT PRIMARY KEY,  username VARCHAR (100) UNIQUE NOT NULL ,  password VARCHAR (255), token VARCHAR (255), is_admin BOOLEAN);";
     $conn->query ($sql);
 }
 

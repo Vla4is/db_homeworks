@@ -1,21 +1,23 @@
 <?php
 function user_logged_in($conn) {
     
-    if (!empty ($_SESSION) && isset ($_SESSION["username"]) && $_SESSION ['token']) {
-        $username = $_SESSION  ['username'];
-        $sql = "SELECT token FROM users WHERE username = ?";
+    if (!empty ($_SESSION) && isset ($_SESSION["user_id"]) && $_SESSION ['token']) {
+        $user_id = $_SESSION  ['user_id'];
+        $sql = "SELECT token, is_admin FROM users WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $username); 
+        $stmt->bind_param("s", $user_id); 
         $stmt->execute();
         $token = "";
-        $stmt->bind_result($token);
+        $is_admin = 0;
+        $stmt->bind_result($token, $is_admin);
         $stmt->fetch();
         $stmt->close();
         if ($token == $_SESSION ["token"]) {
-            return true;
+            return $is_admin ? 2 : 1;
         }
     }else {
-        return false;
+        return 0;
     }
 }
+
 ?>

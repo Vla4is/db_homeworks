@@ -2,7 +2,7 @@
 <?php
 include ("conn.php");
 include ("support_functions.php");
-include ("querys.php");
+
 
 session_start ();
 $user_in = user_logged_in($conn);
@@ -13,6 +13,15 @@ if (!$user_in) {
 }
 
 
+$action_result = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['order_id']) and isset($_POST['delete'])) {
+        delete_order($conn, $_POST['order_id']);
+        $action_result = 'Order deleted successfully';
+        
+    }
+}
 $orders = get_all_orders($conn);
 
 
@@ -32,13 +41,16 @@ $orders = get_all_orders($conn);
 
     <div class="main">
         <?php foreach ($orders as $order): ?>
-           <div>
+           <form method="POST" action ="">
                 <span><?php echo $order ["order_id"]; ?></span>
                 <span><?php echo $order ['item_name']; ?></span>
-            </div>
+                <input type="hidden" name="order_id" value="<?php echo $order ["order_id"]; ?>">
+                <button name="delete" type="submit">delete</button>
+            </form>
         <?php endforeach; ?>
     
             
+        <div><?php echo $action_result ?></div>
         
     </div>
     
