@@ -1,7 +1,7 @@
 
 <?php
-include ("conn.php");
-include ("support_functions.php");
+include ("helpers/conn.php");
+// include ("helpers/support_functions.php");
 
 
 session_start ();
@@ -35,7 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (strlen ($_POST['item_name']) == 0) {
             $errors[''] = 'The item has to be at least 1 char long';
         }else {
-            update_item ($conn, $_POST['item_name'], $_POST['item_id']);
+            $description = $_POST ["description"];
+            $price = $_POST ["price"];
+            update_item ($conn, $_POST['item_name'], $_POST['item_id'], $_POST ["price"], $_POST ["description"]);
             $item_name = $_POST['item_name'];
             $action_result = "Item <b>$item_name</b> updated succesfully";
         }
@@ -50,6 +52,8 @@ $items = get_all_items($conn);
 
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,9 +61,15 @@ $items = get_all_items($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
-<a href="index.php"><button>Back home</button></a>
+    
+    <?php require "header.php";?>
+
+    <div class="body center">
+    <div><?php echo $action_result ?></div>
     <?php if (!empty($errors)): ?>
         <ul style="color: red;">
             <?php foreach ($errors as $error): ?>
@@ -68,28 +78,80 @@ $items = get_all_items($conn);
         </ul>
     <?php endif; ?>
 
-    <div class="main">
-        <?php foreach ($items as $item): ?>
+    
+        <?php foreach ($items as $i=> $item): ?>
             <form action="" method="POST">
+                <div class="edit_item_name">
+                <input type="hidden" value="<?php echo $i; ?>" name="item_id">
+                    <table>
+                        <tr>
+                            <td colspan="2" class="edit_item"><?php echo $item[0]; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Edit name:</td>
+                            <td><input type="text" name="item_name" value = "<?php echo $item[0]; ?>">  </td>
+
+                        </tr>
+                        <tr>
+                            <td>Item price:</td>
+                            <td><input type="text" name="price" value = "<?php echo $item[1]; ?>">  </td>
+
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">Item description</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <textarea name="description" rows="4" cols="50"  ><?php echo $item[2]; ?></textarea>
+                            </td>
+                        </tr>
+                    
+                    <tr>
+                    <td colspan="2">
+                        <div>
+                            <button name="edit" type="submit" >Edit</button>
+                            <button name="delete">Delete</button>
+                        </div>
+                    
+                    </td>
+                    
+                    </tr> 
+                    
+                    </table>
                 
-                <input type="hidden" value="<?php echo $item ['item_id']; ?>" name="item_id">
-                <input type="text" name="item_name" value = "<?php echo $item ["item_name"]; ?>">
-                <button name="edit" type="submit">edit</button>
-                <button type="submit" name="delete">delete</button>
+                
+                </div>
+
+                
             </form>
         <?php endforeach; ?>
     
         <br>
 
         <form action="" method="POST">
-            <input type="text" name="new_item" >
-            <button type="submit" name="new_submit">add</button>
+            <table>
+                <tr>
+                    <td colspan="2" class="textcenter">
+                        <h3>Add a new item</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="new_item" style="width: 400px" ></td>
+                    <td><button type="submit" name="new_submit">add</button></td>
+                </tr>
+            </table>
+            
+            
         </form>
-        <div><?php echo $action_result ?></div>
+        
         
     
         
+    
+
     </div>
-    
+
+    <?php require "footer.php";?>
 </body>
 </html>

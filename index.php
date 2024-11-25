@@ -1,29 +1,9 @@
 <?php
-include 'conn.php';
+session_start ();
 
-include 'support_functions.php';
-session_start();
-$errors = [];
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST["username"])) {
-        $errors [] = "Please enter username";
-    }
-    if (empty($_POST["password"])) {
-        $errors [] = "Please enter password";
-    }
-    $user_id = get_user_id($conn,$_POST["username"]);
-    if ($user_id) {
-        $login_usr = login_user ($conn , $user_id, $_POST["password"]);
-        if (!$login_usr) {
-            $errors [] = "Wrong credentials";
-        }
-    }else {
-        $errors [] = "Wrong credentials";
-    }
-   
-}
+include ("helpers/conn.php");
 
-$user_in = user_logged_in($conn);
+
 
 ?>
 
@@ -34,54 +14,30 @@ $user_in = user_logged_in($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
 <body>
- 
-    <?php if ($user_in) {?>
-        <button onclick="logout ()">logout</button>
-        <?php }else { ?>
-    <a href="register.php"><button onclick=" ">Register</button></a>
-        <?php } ?>
-    <?php if (!empty($errors)): ?>
-    <ul style="color: red;">
-        <?php foreach ($errors as $error): ?>
-            <li><?= $error ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
-    <div class="main">
-    <img src="img/logo.webp" alt="Moving Image" id="movable-image">
-    <?php if ($user_in) {?>
-        <button onclick="showthebeer_waitasec_andgo ('new_order.php')">New order</button>
-        <button onclick="showthebeer_waitasec_andgo ('orders.php')">Previous orders</button>
-        <button onclick="showthebeer_waitasec_andgo ('edit_items.php')">Edit items</button>
-        <?php if ($user_in == 2) { ?> <button onclick="showthebeer_waitasec_andgo ('manage_users.php')">Manage users</button> <?php }?>
+    
+    <?php require "header.php";?>
 
-        <img src="img/loading.gif" alt="" style="width: 50px; height:auto; margin-top: 10px; display: none;" id="beer">
+    <div class="body center">
+        <div class="centeralrow">
+            <img class="checkmark" src="img/checkmark.png" alt="">
+            <span class="">Less than 30% of the clients died from food poisoning</span>
+        </div>
 
-        <?php } else {?>
+        <div class="centeralrow">
+            <img class="checkmark" src="img/checkmark.png" alt="">
+            <span class="">Our delivery drivers almost never go missing. Just don't ask about the last one.</span>
+        </div>
 
+        <div class="centeralrow">
+            <img class="checkmark" src="img/checkmark.png" alt="">
+            <span class="">Over 1,000 pizzas served, and only 152 lawsuits. Now that’s efficiency.</span>
+        </div>
 
-    <form method="post" action="" >
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value=""><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>
-        <button>Submit</button>
-    </form>
-    <?php }?>
     </div>
-
-    <script src="script.js"></script>
+    <?php require "footer.php";?>
 </body>
-
-
-<script>
-const logout = () => {
-    window.location.href = 'logout.php';
-};
-</script>
-
 </html>

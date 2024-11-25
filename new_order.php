@@ -1,22 +1,26 @@
 <?php
-include ("conn.php");
-include ("support_functions.php");
+session_start ();
+include ("helpers/conn.php");
 
-session_start();
-$user_in = user_logged_in($conn);
+if ($user_in) {
+    
 
-if (!$user_in) {
-    header("Location: index.php");
-}
-$bottom_message = "";
 $items = get_all_items($conn);
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['order']) && isset($_POST['item_id'])) {
-        $new_order_id = new_order ($conn, $_POST['item_id']);
-        $bottom_message = "New order with id: $new_order_id placed succesfully";
+$user_id = $_SESSION ["user_id"];
+$cart = get_cart ( $conn, $user_id );
+if ($_SERVER ["REQUEST_METHOD"] == "POST") {
+    $item_id = $_POST["item_id"];
+    if (!isset ($cart [$item_id])) {
+        add_item_cart( $conn, $item_id, $user_id);
+        $cart [$item_id][0]=1;
+    }else {
+        quantity_counter_cart ($conn, $item_id, $user_id, 1);
+        $cart [$item_id][0]++;
     }
+
 }
 
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,17 +32,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<a href="index.php"><button>Back home</button></a>
+    <?php require "header.php";?>
+    
+    <div class="body center">
+        <?php if ($user_in) {?>
 
-    <div class="main">
-    <?php foreach ($items as $item): ?>
+            
+        <h2>Our menu</h2>
+        <table>
+        <?php foreach ($items as $i => $item): ?>
         <form method="POST">
-            <span><?php echo $item['item_name'];?></span>
-            <input type="hidden" name="item_id" value = "<?php echo $item['item_id'];?>">
-            <button type="submit" name="order">Order</button>
+        
+            
+
+            <input name="item_id" type="hidden" value="<?php echo $i; ?>">
+            
+
+            
+                <tr >
+                    <td style="border-top: 1px solid green; padding-top: 10px; "><?php echo $item[0];?></td>
+
+                    <td style="border-top: 1px solid green; padding-top: 10px;">
+                    <?php if ( isset($cart[$i]) ) { ?>
+            <img src="img/shoppingcart.png" alt="test" style="width: 20px;" title = 'Item in cart' >
+            <span><?php echo $cart[$i][0] ?> </span>
+            <?php }?>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td><?php echo $item[1] ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="textcenter">Description:</td>
+                    
+                </tr>
+                <tr><td style="textcenter"><?php echo $item[2] ?></td></tr>
+                <tr>
+                    <td colspan="2"><button type="submit">Add to the cart</button></td>
+                </tr>
+
+            
+            
         </form>
-    <?php endforeach; ?>
-    <div style="color: green;"><?php echo $bottom_message ?></div>
+        <?php endforeach;?>
+            </table>
+            <?php }else {?>
+            <h2>To order you must be logged in!</h2>
+        <?php }?>
+
+
     </div>
+    
+    <?php require "footer.php";?>
+    
 </body>
 </html>

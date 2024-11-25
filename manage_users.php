@@ -1,7 +1,6 @@
 <?php
-include 'conn.php';
+include 'helpers/conn.php';
 
-include 'support_functions.php';
 session_start();
 $bottom_message = "";
 $user_in = user_logged_in($conn);
@@ -49,6 +48,7 @@ $users = get_all_users($conn);
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,23 +56,28 @@ $users = get_all_users($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
-<a href="index.php"><button>Back home</button></a>
+    
+    <?php require "header.php";?>
 
+    <div class="body center">
+        
     <ul style="color: red;">
         <?php foreach ($errors as $error): ?>
             <li><?= $error ?></li>
         <?php endforeach; ?>
     </ul>
 
-    <div class="main">
+    
     <?php foreach ($users as $user): ?>
-            <form action="" method="POST">
+            <form action="" method="POST" style="margin: 10px">
                 
                 <input type="hidden" value="<?php echo $user ['user_id']; ?>" name="user_id">
                 <span>User ID: <?php echo $user ['user_id'] ;?></span>
-                <span>Username: <?php echo $user ['username'] ;?></span>
+                <span>Email: <?php echo $user ['email'] ;?></span>
                 <input type="text" name="new_password" placeholder="New password">
                 <button name="edit" type="submit">Change password</button>
                 <button type="submit" name="delete">Delete user</button>
@@ -85,6 +90,9 @@ $users = get_all_users($conn);
             </form>
         <?php endforeach; ?>
             <div style="color: green;"><?php echo $bottom_message ?></div>
-        </div>
+        
+
+    </div>
+    <?php require "footer.php";?>
 </body>
 </html>
