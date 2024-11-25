@@ -28,6 +28,8 @@ function create_orders_table ($conn) {
     $conn->query ($sql);
     $sql = "INSERT INTO orders (order_id) VALUES (1002);";
     $conn->query ($sql);
+    $sql = "CREATE TRIGGER ins_sum BEFORE INSERT ON orders FOR EACH ROW SET NEW.total_price = NEW.quantity * NEW.price_paid;";
+    $conn->query ($sql);
 }
 
 function create_cart_table ($conn) {
@@ -36,9 +38,8 @@ function create_cart_table ($conn) {
 }
 
 function create_full_orders_view ($conn) {
-    $sql ="CREATE VIEW order_details AS SELECT o.order_id, o.user_id ,i.item_name, o.price_paid AS price, o.quantity FROM orders o JOIN items i ON o.item_id = i.item_id;";
+    $sql ="CREATE VIEW order_details AS SELECT o.order_id, o.user_id ,i.item_name, o.price_paid AS price, o.total_price, o.quantity FROM orders o JOIN items i ON o.item_id = i.item_id;";
     $conn->query ($sql);
 }
-
 
  ?>

@@ -56,7 +56,7 @@ if($user_in) {
                     <td><?php echo $item[0]; ?></td>
                     <td><?php echo $item[2]; ?></td>
                     <td><?php echo $item[1]; ?></td>
-                    <td><?php echo $k = $item[1]*$item[2]; $total += $k; ?></td>
+                    <td><?php echo $item[3]; $total += $item[3]; ?></td>
 
                 </tr>
             <?php endforeach;?>

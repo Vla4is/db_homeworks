@@ -130,11 +130,11 @@ function delete_order ($conn, $order_id) {
 }
 
 function get_details_order( $conn, $order_id ) {
-$sql ="SELECT item_name, price, quantity FROM order_details WHERE order_id = $order_id;";
+$sql ="SELECT item_name, price, quantity, total_price FROM order_details WHERE order_id = $order_id;";
 $result = $conn->query ($sql);
 $order = [];
 while ($row = $result->fetch_assoc()) {
-    $order[]=[$row ['item_name'], $row ['price'], $row ['quantity']];
+    $order[]=[$row ['item_name'], $row ['price'], $row ['quantity'], $row ['total_price']];
 }
 return $order;
 
