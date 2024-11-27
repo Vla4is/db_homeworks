@@ -6,7 +6,10 @@
 <img id ="beer"src="img/loading.gif" alt="">
     <div class="header center">
         <h1>Welcome to the best pizzeria in the universe</h1>
+        <?php if ($user_in) {?>
         <img src="img/shoppingcart.png" class="carticon"alt="" onclick="showthebeer_waitasec_andgo ('cart.php')">
+        <?php }?>
+
     </div>
  
     <div class="navbar">
