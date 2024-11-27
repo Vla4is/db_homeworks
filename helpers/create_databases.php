@@ -10,7 +10,7 @@ function create_databases ($conn, $database_name) {
     create_orders_table ($conn);
     create_cart_table ($conn);
     create_full_orders_view ($conn);
-
+    create_triggers($conn);
 }
 
 function create_users_table ($conn) {
@@ -28,8 +28,7 @@ function create_orders_table ($conn) {
     $conn->query ($sql);
     $sql = "INSERT INTO orders (order_id) VALUES (1002);";
     $conn->query ($sql);
-    $sql = "CREATE TRIGGER ins_sum BEFORE INSERT ON orders FOR EACH ROW SET NEW.total_price = NEW.quantity * NEW.price_paid;";
-    $conn->query ($sql);
+
 }
 
 function create_cart_table ($conn) {
@@ -41,5 +40,11 @@ function create_full_orders_view ($conn) {
     $sql ="CREATE VIEW order_details AS SELECT o.order_id, o.user_id ,i.item_name, o.price_paid AS price, o.total_price, o.quantity FROM orders o JOIN items i ON o.item_id = i.item_id;";
     $conn->query ($sql);
 }
+function create_triggers ($conn) {
+    $sql = "CREATE TRIGGER calculate_total_price BEFORE INSERT ON orders FOR EACH ROW SET NEW.total_price = NEW.quantity * NEW.price_paid;";
+    $conn->query ($sql);
+    $sql = "CREATE TRIGGER delete_cart_items AFTER UPDATE ON items FOR EACH ROW BEGIN IF NEW.active = 0 THEN DELETE FROM carts WHERE item_id = OLD.item_id; END IF; END";
+    $conn->query ($sql);
+    }
 
  ?>

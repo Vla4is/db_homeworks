@@ -64,8 +64,6 @@ function delete_item ( $conn, $item_id ) {
     // $sql = "DELETE FROM items WHERE item_id = '$item_id';";
     $sql ="UPDATE items SET active = 0 WHERE item_id = $item_id;";
     $conn->query ($sql);
-    $sql = "DELETE from carts WHERE item_id='$item_id'; ";
-    $conn->query ($sql);
 }
 
 function update_item ($conn, $name, $item_id, $price, $item_description) {
