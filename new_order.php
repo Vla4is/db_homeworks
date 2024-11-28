@@ -54,7 +54,7 @@ if ($_SERVER ["REQUEST_METHOD"] == "POST") {
 
                     <td style="border-top: 1px solid green; padding-top: 10px;">
                     <?php if ( isset($cart[$i]) ) { ?>
-            <img src="img/shoppingcart.png" alt="test" style="width: 20px;" title = 'Item in cart' >
+            <img src="img/shoppingcart.png" alt="test" style="width: 20px;" title = 'Item in cart' onclick="showthebeer_waitasec_andgo ('cart.php')" >
             <span><?php echo $cart[$i][0] ?> </span>
             <?php }?>
                     </td>

@@ -11,8 +11,12 @@ if ($user_in != 2) {
 $errors = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["delete"])) {
-        delete_user ($conn, $_POST ['user_id']);
-        $bottom_message = "User deleted successfully";
+        if ($_SESSION['user_id'] == $_POST ['user_id']) {
+            $errors[] = 'You cannot remove yourself';
+        }else {
+            delete_user ($conn, $_POST ['user_id']);
+            $bottom_message = "User deleted successfully";
+        }
 
     }elseif (isset($_POST["edit"])) {
         if (strlen($_POST ["new_password"]) < 6 ) {
@@ -71,24 +75,37 @@ $users = get_all_users($conn);
         <?php endforeach; ?>
     </ul>
 
-    
+    <table>
+        <tr class="textcenter">
+            <td>User ID</td>
+            <td>Email</td>
+            <td>New password</td>
+            <td>Delete</td>
+            <td>Admin</td>
+            
+        </tr>
     <?php foreach ($users as $user): ?>
-            <form action="" method="POST" style="margin: 10px">
+            <tr>
+            <form action="manage_users.php" method="POST" style="margin: 10px">
                 
                 <input type="hidden" value="<?php echo $user ['user_id']; ?>" name="user_id">
-                <span>User ID: <?php echo $user ['user_id'] ;?></span>
-                <span>Email: <?php echo $user ['email'] ;?></span>
-                <input type="text" name="new_password" placeholder="New password">
-                <button name="edit" type="submit">Change password</button>
-                <button type="submit" name="delete">Delete user</button>
+                <td><?php echo $user ['user_id'] ;?></td>
+                <td> <?php echo $user ['email'] ;?></td>
+                <td><input type="text" name="new_password" placeholder="New password">
+                <button name="edit" type="submit">Change password</button></td>
+                <td><button type="submit" name="delete">Delete user</button></td>
+                <td>
                 <?php if ($user['is_admin'] == 1) { ?>
                 <button type="sumbit" name="remove_admin" style="color: red;">Remove admin</button>
                 <?php }else { ?>
                 <button type="sumbit" name="set_admin">Set admin</button>
                 <?php } ?>
+                </td>
 
             </form>
+            </tr>
         <?php endforeach; ?>
+        </table>
             <div style="color: green;"><?php echo $bottom_message ?></div>
         
 

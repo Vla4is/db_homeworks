@@ -80,7 +80,7 @@ function new_order ($conn, $user_id, $cart ) {
         $item_id=$i;
         $quantity = $item [0];
         $sql = "INSERT INTO orders (order_id, item_id, user_id, quantity, price_paid) VALUES ($order_id, $item_id, $user_id, $quantity, (SELECT price FROM items WHERE item_id=$item_id));";
-        $result = $conn->query ($sql);
+        $conn->query ($sql);
         
     }
     return $order_id;

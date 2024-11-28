@@ -48,6 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ?>
 
     <div class="body center">
+    <ul style="color: red;">
+        <?php foreach ($errors as $error): ?>
+            <li><?= $error ?></li>
+        <?php endforeach; ?>
+    </ul>
     <form method="post" action="">
         <table>
             <tr>
