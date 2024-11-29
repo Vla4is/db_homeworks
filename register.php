@@ -55,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
 <body>
@@ -77,15 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </ul>
 <?php endif; ?>
 <div class="main">
-<!-- <form method="post" action="">
-    <label for="email">Email:</label>
-    <input type="text" id="username" name="email" value="<?= htmlspecialchars($email) ?>"><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br><br>
-    <label for="confirm_password">Confirm password:</label>
-    <input type="password" id="confirm_password" name="confirm_password"><br><br>
-    <input type="submit" value="Register">
-</form> -->
 
 <form method="post" action="">
     <table>

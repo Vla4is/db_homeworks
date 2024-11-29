@@ -67,10 +67,11 @@ $total_price = 0;
         <form action="" method="POST">
                 <div class="itemincart">
                 <span><?php echo $row[2]; ?></span>
-                <button class="counters" name="counter" value="1">+</button>
+                <button class="counters" name="counter" value="0">-</button>
                 <input type="hidden" name="item_id" value="<?php echo $i; ?>">
                 <input class="counter" type="text" value="<?php echo $row[0]; ?>" disabled>
-                <button class="counters" name="counter" value="0">-</button>
+                <button class="counters" name="counter" value="1">+</button>
+
                 <?php echo $price = $row[1]*$row[0]; $total_price+=$price?></span>
                 <button name="delete" >delete</button>
                 </div>
