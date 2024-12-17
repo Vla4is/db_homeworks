@@ -185,3 +185,17 @@ body {
     flex-direction: column;
     align-items: stretch;
 }
+.background_grey { 
+    background-color: grey;
+    color:white;
+}
+.active_item:hover {
+    background-color: rgb(47, 79, 79, 0.2);
+}
+.pointer:hover {
+    cursor: pointer;
+}
+.size-big {
+    width: 10%;
+    padding: 2px;
+}

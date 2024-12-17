@@ -60,6 +60,30 @@ function get_all_items($conn) {
     }
 }
 
+function get_items_for_history ($conn) {
+    $sql = "SELECT item_name, item_id, active FROM items;";
+    $result = $conn->query ($sql);
+    $items = [];
+    while ($row = $result->fetch_assoc()) {
+        $items[$row['item_id']] = [$row['item_id'], $row['item_name'], $row ['active']];
+    }
+    return $items;
+}
+
+function get_item_history ($conn, $item_id) {
+    $sql = "SELECT item_name, price, item_description, active, edit_date FROM items_history WHERE item_id='$item_id';";
+    $result=$conn->query ($sql);
+    if ($result->num_rows > 0) {
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+    } else {
+        return []; // No results found
+    }
+}
+
 function delete_item ( $conn, $item_id ) {
     // $sql = "DELETE FROM items WHERE item_id = '$item_id';";
     $sql ="UPDATE items SET active = 0 WHERE item_id = $item_id;";

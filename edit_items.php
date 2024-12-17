@@ -69,6 +69,7 @@ $items = get_all_items($conn);
     <?php require "header.php";?>
 
     <div class="body center">
+        <button onclick="showthebeer_waitasec_andgo ('items_history.php')">Item history</button>
     <div><?php echo $action_result ?></div>
     <?php if (!empty($errors)): ?>
         <ul style="color: red;">
