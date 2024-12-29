@@ -12,7 +12,7 @@ function register_user ($conn, $email, $password) {
 function login_user ($conn, $user_id, $password) {
     $sql = "SELECT password FROM users WHERE user_id = ?;";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $user_id); // "s" means the database expects a string
+    $stmt->bind_param("s", $user_id); 
     $stmt->execute();
     $hashed_password = "";
     $stmt->bind_result($hashed_password);
@@ -30,16 +30,12 @@ function login_user ($conn, $user_id, $password) {
     }
     return false;
    
-    // $result = $conn->query($sql);
-    // if ($result && $result->num_rows > 0) {
-
-    //     password_verify($enteredPassword, $hashedPasswordFromDB
-    // }
 }
 
 function add_item ($conn, $item_name) {
-    $sql = "INSERT INTO items (item_name) VALUES ('$item_name');";
-    $conn->query ($sql);
+    $stmt = $conn->prepare("INSERT INTO items (item_name) VALUES (?);");
+    $stmt->bind_param ("s", $item_name);
+    $stmt->execute();
     return true;
 }
 
@@ -91,8 +87,10 @@ function delete_item ( $conn, $item_id ) {
 }
 
 function update_item ($conn, $name, $item_id, $price, $item_description) {
-    $sql = "UPDATE items SET item_name = '$name', price='$price', item_description='$item_description' WHERE item_id = '$item_id';";
-    $conn->query ($sql);
+
+    $stmt = $conn->prepare ("UPDATE items SET item_name = ?, price=?, item_description=? WHERE item_id = ?;");
+    $stmt->bind_param("sdsi", $name, $price, $item_description, $item_id);
+    $stmt->execute();
 }
 
 function new_order ($conn, $user_id, $cart ) {
@@ -103,13 +101,14 @@ function new_order ($conn, $user_id, $cart ) {
     foreach ($cart as $i=>$item) {
         $item_id=$i;
         $quantity = $item [0];
-        $sql = "INSERT INTO orders (order_id, item_id, user_id, quantity, price_paid) VALUES ($order_id, $item_id, $user_id, $quantity, (SELECT price FROM items WHERE item_id=$item_id));";
+        $sql = "INSERT INTO orders (order_id, user_id, quantity, record_id) VALUES ($order_id, $user_id, $quantity, (SELECT MAX(record_id) FROM items_history WHERE item_id=$item_id));";
         $conn->query ($sql);
         
     }
     return $order_id;
        
 }
+
 
 function get_max_orders ($conn) {
     $sql = "SELECT max(order_id) AS max_item_id from orders;";
